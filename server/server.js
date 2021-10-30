@@ -22,3 +22,10 @@ server.listen({port: 9000})
 
 // playground `query` matches `Query` in schema
 // line(4) schema is the invisible entry point or the root element
+
+/*playground query:
+query {
+    greeting
+}
+keyword query can be omitted
+*/
