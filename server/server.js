@@ -1,13 +1,23 @@
-const { gql } = require('apollo-server'); //tag function
+const { ApolloServer, gql } = require('apollo-server');
 
-// simplest graphql schema (1 query taht return string)
 const typeDefs = gql`
     type Query {
         greeting: String
     }
 `;
 
-// line 2 -> graphql schema definition
-// type -> like class, has felds
+const resolvers = {
+    Query: {
+        greeting: () => 'Hello World!' //function resolves value of gretings field, can be from db
+    }
+}
 
-console.log(typeDefs);
+// resolvers need to mirror typedefinition precicely
+// Query(line 4) => Query(line 10)
+
+const server = new ApolloServer({typeDefs, resolvers});
+server.listen({port: 9000})
+    .then((serverInfo) => console.log(`server running at ${serverInfo.url}`));
+
+
+// run by opening terminal, `node server.js`
