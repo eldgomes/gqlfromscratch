@@ -14,8 +14,11 @@ async function fetchGreeting() {
             `
         })
     });
-    const responseBody = await response.json();
-    console.log(responseBody);
+    const { data } = await response.json();
+    return data;
 }
 
-fetchGreeting();
+fetchGreeting().then(({greeting})=> { //can also be written as data.greeting withoit the paranthesis (no object destructuring)
+    const title = document.querySelector('h1');
+    title.textContent = greeting;
+});
