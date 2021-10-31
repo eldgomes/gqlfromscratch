@@ -1,3 +1,3 @@
-start server: cd/server; `node server.js`
-
-on browser: localhost:9000/graphql
+You can go any levels deeper with the nesting in queries
+Calls resolvers multiple times
+Can be bad on db

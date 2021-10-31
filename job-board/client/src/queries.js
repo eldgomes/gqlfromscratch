@@ -26,5 +26,9 @@ export const loadCompanyQuery = `query CompanyQuery($id: ID!) {
         id
         title
         description
+        jobs {
+            id
+            title
+        }
     }
 }`;
