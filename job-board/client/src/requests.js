@@ -1,5 +1,5 @@
 const endpointURL = 'http://localhost:9000/graphql';
-const { loadJobsQuery, loadJobQuery, loadCompanyQuery} = require('./queries');
+const { loadJobsQuery, loadJobQuery, loadCompanyQuery, createJobMutation} = require('./queries');
 
 async function graphqlRequest(query, variables = {}) {
     const response = fetch(endpointURL, {
@@ -31,4 +31,9 @@ export async function loadJob(id) {
 export async function loadCompany(id) {
     const data = await graphqlRequest(loadCompanyQuery, { id });
     return data.company;
+}
+
+export async function createJob(input) {
+    const { job } = await graphqlRequest(createJobMutation, {input});
+    return job;
 }
