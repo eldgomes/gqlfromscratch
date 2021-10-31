@@ -1,3 +1,5 @@
+const { ApolloServer, gql } = require('apollo-server-express');
+
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
@@ -13,6 +15,13 @@ app.use(cors(), bodyParser.json(), expressJwt({
   secret: jwtSecret,
   credentialsRequired: false
 }));
+
+const typDesfs = gql ``; //todo
+
+const resolvers = {}; //todo
+
+const apolloServer = new ApolloServer({typDesfs, resolvers});
+apolloServer.applyMiddleware({app, path: '/graphql'});
 
 app.post('/login', (req, res) => {
   const {email, password} = req.body;
