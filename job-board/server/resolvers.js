@@ -7,7 +7,12 @@ const Query = {
 };
 
 const Mutation = {
-    createJob: (root, {input}) => {
+    createJob: (root, {input}, context) => { //context used to provide data not belonging to gql but are part of application
+        // check user auth
+        if (!context.user) {
+            throw new Error('Unauthorized')
+        }
+        console.log(conext);
         const id = db.jobs.create(input);
         return db.jobs.get(id);
     } 

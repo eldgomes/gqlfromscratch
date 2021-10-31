@@ -19,8 +19,9 @@ app.use(cors(), bodyParser.json(), expressJwt({
 
 const typDesfs = gql(fs.readFileSync('./schema.graphql', {encoding: 'utf8'}));
 const resolvers = require('./resolvers');
-
-const apolloServer = new ApolloServer({typDesfs, resolvers});
+// const context = ({req}) => ({method: req.method}); //log return POST
+const context = ({req}) => ({user: req.user}); //if user is undefined in the log => unauthenticated
+const apolloServer = new ApolloServer({typDesfs, resolvers, context});
 apolloServer.applyMiddleware({app, path: '/graphql'});
 
 app.post('/login', (req, res) => {
@@ -30,7 +31,7 @@ app.post('/login', (req, res) => {
     res.sendStatus(401);
     return;
   }
-  const token = jwt.sign({sub: user.id}, jwtSecret);
+  const token = jwt.sign({sub: user.id}, jwtSecret); //return access token for authentication , found in response
   res.send({token});
 });
 
