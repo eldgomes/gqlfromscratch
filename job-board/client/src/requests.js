@@ -1,15 +1,21 @@
+import { isLoggedIn, getAccessToken } from './auth';
+
 const endpointURL = 'http://localhost:9000/graphql';
 const { loadJobsQuery, loadJobQuery, loadCompanyQuery, createJobMutation} = require('./queries');
 
 async function graphqlRequest(query, variables = {}) {
-    const response = fetch(endpointURL, {
+    const request = {
         method: 'POST',
         headers: {'content-type': 'application/json'},
         body: JSON.stringify({
             query: query,
             variables: variables
         })
-    });
+    };
+    if (isLoggedIn()) {
+        request.header['authorization'] = 'Bearer' + getAccessToken();
+    }
+    const response = fetch(endpointURL, request);
     const responseBody = await response.json();
     if (responseBody.errors) {
         const message = responseBody.errors.map(error => error.message).join('\n');
