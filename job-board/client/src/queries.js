@@ -20,3 +20,11 @@ export const loadJobQuery = `query JobQuery($id: ID!) {
         }
     }
 }`;
+
+export const loadCompanyQuery = `query CompanyQuery($id: ID!) {
+    company(id: $id) {
+        id
+        title
+        description
+    }
+}`;
