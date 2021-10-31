@@ -11,6 +11,10 @@ async function graphqlRequest(query, variables = {}) {
         })
     });
     const responseBody = await response.json();
+    if (responseBody.errors) {
+        const message = responseBody.errors.map(error => error.message).join('\n');
+        throw new Error(message); //do something better on the UI with this error
+    }
     return responseBody.data;
 }
 
