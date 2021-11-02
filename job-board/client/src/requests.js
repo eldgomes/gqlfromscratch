@@ -25,7 +25,7 @@ const client = new ApolloClient({
 });
 
 export async function loadJobs() {
-    const { data } = await client.query({loadJobsQuery}) //client object has query method used to send request
+    const { data } = await client.query({loadJobsQuery, fetchPolicy: 'no-cache'}) //client object has query method used to send request
     return data.jobs;
 }
 
