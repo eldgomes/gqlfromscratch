@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'; //tag fn are introduced in es6 along with template strings, strings processed by gql fn
 
-export const loadJobsQuery = gql`{
+export const loadJobsQuery = gql`query JobsQuery{
     jobs {
         id
         title
@@ -15,11 +15,11 @@ export const loadJobQuery = gql`query JobQuery($id: ID!) {
     job(id: $id) {
         id
         title
-        description
         company {
             id
             name
         }
+        description
     }
 }`;
 
@@ -27,11 +27,11 @@ export const loadCompanyQuery = gql`query CompanyQuery($id: ID!) {
     company(id: $id) {
         id
         title
-        description
         jobs {
             id
             title
         }
+        description
     }
 }`;
 
