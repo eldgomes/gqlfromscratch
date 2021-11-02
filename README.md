@@ -1,1 +1,1 @@
-set company during create job, same as company of authenticated user
+these changes will result in an authentication error as the new request mechanism doesnt handle it yet
