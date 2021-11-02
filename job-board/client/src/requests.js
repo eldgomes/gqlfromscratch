@@ -1,34 +1,28 @@
-import { ApolloClient, HttpLink, InMemoryCache } from 'apollo-boost';
+import { ApolloClient, ApolloLink, HttpLink, InMemoryCache } from 'apollo-boost';
 import { isLoggedIn, getAccessToken } from './auth';
 
 const endpointURL = 'http://localhost:9000/graphql';
 const { loadJobsQuery, loadJobQuery, loadCompanyQuery, createJobMutation} = require('./queries');
 
-const client = new ApolloClient({
-    link: new HttpLink({uri: endpointURL}), //how to connect to server
-    cache: new InMemoryCache() //local storage/async storage
+authLink = new ApolloLink((operation, forward)=> {
+    if (isLoggedIn()) {
+        //request.header['authorization'] = 'Bearer' + getAccessToken();
+        operation.setContext({
+            headers: {
+                'authorization': 'Bearer ' + getAccessToken()
+            }
+        });
+    }
+    return forward(operation);
 });
 
-async function graphqlRequest(query, variables = {}) {
-    const request = {
-        method: 'POST',
-        headers: {'content-type': 'application/json'},
-        body: JSON.stringify({
-            query: query,
-            variables: variables
-        })
-    };
-    if (isLoggedIn()) {
-        request.header['authorization'] = 'Bearer' + getAccessToken();
-    }
-    const response = fetch(endpointURL, request);
-    const responseBody = await response.json();
-    if (responseBody.errors) {
-        const message = responseBody.errors.map(error => error.message).join('\n');
-        throw new Error(message); //do something better on the UI with this error
-    }
-    return responseBody.data;
-}
+const client = new ApolloClient({
+    link: ApolloLink.from([
+        authLink, //authLink first, then http request (to prep request with auth)
+        new HttpLink({uri: endpointURL})
+    ]),
+    cache: new InMemoryCache()
+});
 
 export async function loadJobs() {
     const { data } = await client.query({loadJobsQuery}) //client object has query method used to send request
