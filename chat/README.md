@@ -1,1 +1,1 @@
-gets error in playground as websocket not enabled
+find most of this stuff in apollo documentation
