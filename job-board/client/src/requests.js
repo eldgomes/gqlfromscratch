@@ -1,7 +1,13 @@
+import { ApolloClient, HttpLink, InMemoryCache } from 'apollo-boost';
 import { isLoggedIn, getAccessToken } from './auth';
 
 const endpointURL = 'http://localhost:9000/graphql';
 const { loadJobsQuery, loadJobQuery, loadCompanyQuery, createJobMutation} = require('./queries');
+
+const client = new ApolloClient({
+    link: new HttpLink({uri: endpointURL}), //how to connect to server
+    cache: new InMemoryCache() //local storage/async storage
+});
 
 async function graphqlRequest(query, variables = {}) {
     const request = {
