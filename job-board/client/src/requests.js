@@ -4,7 +4,7 @@ import { isLoggedIn, getAccessToken } from './auth';
 const endpointURL = 'http://localhost:9000/graphql';
 const { loadJobsQuery, loadJobQuery, loadCompanyQuery, createJobMutation} = require('./queries');
 
-authLink = new ApolloLink((operation, forward)=> {
+const authLink = new ApolloLink((operation, forward)=> {
     if (isLoggedIn()) {
         //request.header['authorization'] = 'Bearer' + getAccessToken();
         operation.setContext({
