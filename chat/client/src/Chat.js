@@ -1,8 +1,8 @@
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import React from 'react';
 import MessageInput from './MessageInput';
 import MessageList from './MessageList';
-import { messagesQuery } from './graphql/queries';
+import { messagesQuery, addMessageMutation } from './graphql/queries';
 
 const Chat = (props) => {
   const {user} = props;
@@ -11,10 +11,12 @@ const Chat = (props) => {
   // also pass veriables, fetchpoolicy in useQuery, 
   // get loading out out of it as well to show loader, get error as well
 
-  const messages = data ? data.messages : [];
+  const [addMessage, result]= useMutation(addMessageMutation); //return a fn and a result obj (has loading, error, data, called props)
 
-  const handleSend = text => {
-    //TODO
+  const messages = result.data ? result.data.messages : [];
+
+  const handleSend = async (text) => {
+    /*const {data} =*/ await addMessage({variables: {input: {text}}}); //dont need to do anything with data
   }
 
   return (
