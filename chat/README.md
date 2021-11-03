@@ -1,3 +1,1 @@
-apollo cache -> central store (can be replacement for redux store)
-
-called with `cache.writeData`
+a hook is just a function whose name starts with "use"
