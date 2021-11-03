@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
-import React, {useState} from 'react';
+import React from 'react';
 import MessageInput from './MessageInput';
 import MessageList from './MessageList';
 import { messagesQuery, addMessageMutation, messageAddedSubscription } from './graphql/queries';
@@ -7,17 +7,17 @@ import { messagesQuery, addMessageMutation, messageAddedSubscription } from './g
 const Chat = (props) => {
   const {user} = props;
 
-  const [messages, setMessages] = useState([]);
-
-  useQuery(messagesQuery, {
-    onCompleted: data => setMessages(data.messages)
-  }); 
+  const {data} = useQuery(messagesQuery);  //also updates to local storage changes
+  const messages = data ? data.messages : [];
 
   useSubscription(messageAddedSubscription, {
-    onSubscriptionData: (result) => {
-      setMessages(message.concat(result.subscriptionData.data.messageAdded));
+    onSubscriptionData: ({client, subscriptionData}) => {
+      client.writeData({data: { //writing to cache //~client.cache.writeData
+        messages: message.concat(subscriptionData.data.messageAdded)
+      }});
     }
-  }); // handles closing subscriptions
+  });
+  //after writing to cache, component is re-rendered and useQuery returns updated value
 
   const [addMessage, result]= useMutation(addMessageMutation); //return a fn and a result obj (has loading, error, data, called props)
 

@@ -1,3 +1,3 @@
-when using hooks react manages state for us. be careful
+apollo cache -> central store (can be replacement for redux store)
 
-follow rules of hook
+called with `cache.writeData`
