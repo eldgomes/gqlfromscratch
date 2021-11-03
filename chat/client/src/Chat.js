@@ -1,14 +1,20 @@
-import React, {useState} from 'react';
+import { useQuery } from '@apollo/client';
+import React from 'react';
 import MessageInput from './MessageInput';
 import MessageList from './MessageList';
+import { messagesQuery } from './graphql/queries';
 
 const Chat = (props) => {
   const {user} = props;
-  const [messages, setMessages] = useState([]);
+
+  const result = useQuery(messagesQuery); //rendered twice, first time data is null, second time it loads it
+  // also pass veriables, fetchpoolicy in useQuery, 
+  // get loading out out of it as well to show loader, get error as well
+
+  const messages = data ? data.messages : [];
 
   const handleSend = text => {
-    const message = {id: text, from: 'you', text};
-    setMessages(messages.concat(message));
+    //TODO
   }
 
   return (
